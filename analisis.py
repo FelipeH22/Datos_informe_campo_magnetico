@@ -10,27 +10,23 @@ print(df1.dtypes)
 def ajuste_1():
     x = df1.I.values.reshape(10, 1)
     y = df1.Angulo.values.reshape(10, 1)
-    regr = LinearRegression()
-    regr.fit(x, y)
-    plt.scatter(x, y, color='black')
-    plt.xlabel('I(a)')
-    plt.ylabel('Ángulo(°)')
-    plt.plot(x, regr.predict(x), color='blue', linewidth=3, )
-    plt.title(f'intercepto:{round(regr.intercept_[0], 3)} Coeficiente:{round(regr.coef_[0][0], 3)}')
-    plt.savefig('ajuste1.png')
-    plt.clf()
+    plot(x,y,1)
 
 def ajuste_2():
     x = df2.Numero_vueltas.values.reshape(3, 1)
     y = df2.Angulo.values.reshape(3, 1)
+    plot(x,y,2)
+
+
+def plot(x,y,i):
     regr = LinearRegression()
     regr.fit(x, y)
     plt.scatter(x, y, color='black')
-    plt.xlabel('Número de vueltas')
-    plt.ylabel('Ángulo(°)')
+    plt.xlabel(f'{"I(A)" if i==1 else "Número de vueltas"}')
+    plt.ylabel('Ángulo (°)')
     plt.plot(x, regr.predict(x), color='blue', linewidth=3, )
     plt.title(f'intercepto:{round(regr.intercept_[0], 3)} Coeficiente:{round(regr.coef_[0][0], 3)}')
-    plt.savefig('ajuste2.png')
+    plt.savefig(f'ajuste{i}.png')
     plt.clf()
 
 def export_latex():
