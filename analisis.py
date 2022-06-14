@@ -1,6 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
-from uncertainties import ufloat
+from uncertainties import ufloat,unumpy
 from sklearn.linear_model import LinearRegression
 
 df1=pd.read_csv('tabla_1.csv')
@@ -10,6 +10,8 @@ print(df1.dtypes)
 def ajuste_1():
     x = df1.I.values.reshape(10, 1)
     y = df1.Angulo.values.reshape(10, 1)
+    print(calcula_media(x,0.005))
+    print(calcula_media(y, 1))
     plot(x,y,1)
 
 def ajuste_2():
@@ -39,8 +41,9 @@ def export_latex():
         pass
     return df1.to_latex(index=False), df2.to_latex(index=False)
 
-
+def calcula_media(x,incert):
+    arr1=unumpy.uarray(x,[incert for _ in range(10)])
+    return arr1.mean()
 
 ajuste_1()
-ajuste_2()
-print(f'{export_latex()[0]}\n {export_latex()[1]}')
+#print(f'{export_latex()[0]}\n {export_latex()[1]}')
