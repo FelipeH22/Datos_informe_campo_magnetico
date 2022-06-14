@@ -1,6 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 from uncertainties import ufloat,unumpy
+from uncertainties.umath import *
 from sklearn.linear_model import LinearRegression
 
 df1=pd.read_csv('tabla_1.csv')
@@ -12,6 +13,8 @@ def ajuste_1():
     y = df1.Angulo.values.reshape(10, 1)
     print(calcula_media(x,0.005))
     print(calcula_media(y, 1))
+    df1['campo']=calcula_campo(x,y)
+    print(df1)
     plot(x,y,1)
 
 def ajuste_2():
@@ -28,7 +31,8 @@ def plot(x,y,i):
     plt.ylabel('Ángulo (°)')
     plt.plot(x, regr.predict(x), color='blue', linewidth=3, )
     plt.title(f'intercepto:{round(regr.intercept_[0], 3)} Coeficiente:{round(regr.coef_[0][0], 3)}')
-    plt.savefig(f'ajuste{i}.png')
+    #plt.savefig(f'ajuste{i}.png')
+    plt.show()
     plt.clf()
 
 def export_latex():
@@ -45,5 +49,11 @@ def calcula_media(x,incert):
     arr1=unumpy.uarray(x,[incert for _ in range(10)])
     return arr1.mean()
 
+def calcula_campo(i,an):
+    i=list(map(lambda x: ufloat(x,0.005),i))
+    an=list(map(lambda x: ufloat(x,1),an))
+    resultado=[(15*i[n]*4*3.141592*0.0000001)/(2*0.0635*tan(an[n]*3.141592/180)) for n in range(10)]
+    return resultado
+  
 ajuste_1()
 #print(f'{export_latex()[0]}\n {export_latex()[1]}')
